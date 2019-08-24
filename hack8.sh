@@ -48,7 +48,7 @@ if [ $choose == '1' ] || [ $choose == '01' ]
 then
 	print_banner	
 	echo -e "\e[96m 00:[back]\n 01:nmap\n 02:wpscan\n 03:nikto\n 04:dirb\n 05:sqlmap "
-	echo -e "\e[96m 06:change mac-adres\n 07:создать словарь для брута\n 08:update"
+	echo -e "\e[96m 06:change mac-adres\n 07:создать словарь для брута\n 08:update\n 09:uniscan"
 	echo -e "${GREEN}choose the number: "
 	read use
 	if [ $use == '0'  ] || [ $use == '00' ]
@@ -112,6 +112,12 @@ then
         elif [ $use == '8'  ] || [ $use == '08'  ]
 	then
 	apt update
+	elif [ $use == '9'  ] || [ $use == '09'  ]
+	then 
+	echo 'Crunch'
+	echo -e '\e[32mGive me target(example:  target.com): '
+	read site 
+	uniscan -u $site -qweds
 	else
 	echo -e '\e[32mWrite normalno'
 	fi
