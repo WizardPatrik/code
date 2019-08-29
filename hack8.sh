@@ -19,7 +19,8 @@ cat << "EOF"
 
 
 EOF
-printf  "\e[32m[Coded by]: ${RED}https://vk.com/hack8\n"
+printf  "\e[32m[Coded by]: ${RED}https://vk.com/hack8\n\e[35m"
+
 }
 print_banner
 
@@ -46,7 +47,7 @@ if [ $choose == '1' ] || [ $choose == '01' ]
 then
 	print_banner	
 	echo -e "\e[96m 00:[back]\n 01:nmap\n 02:wpscan\n 03:nikto\n 04:dirb\n 05:sqlmap "
-	echo -e "\e[96m 06:change mac-adres\n 07:создать словарь для брута\n 08:update\n 09:uniscan\n 10:check Cms\n 11:find mail"
+	echo -e "\e[96m 06:change mac-adres\n 07:создать словарь для брута\n 08:update\n 09:uniscan\n 10:check Cms\n 11:find mail\n 12:ping\n 13:info Bankcard"
 	
 	 read -p $'\e[32mchoose the number:\e[0m' use
 	if [ $use == '0'  ] || [ $use == '00' ]
@@ -123,13 +124,24 @@ then
 	then 
 	read -p $'\e[31mGive me target: \e[0m' site
 	theharvester -d $site -b all -l 800
+	elif [ $use == '12'  ]
+	then
+	read -p $'\e[32mGive me target(example:  target.com): ' site
+	ping $site
+	elif [ $use == '13'  ] 
+	then
+	rm -rf card.txt
+	read -p $'\e[35mGive me Card: \e[0m' card
+	curl "https://lookup.binlist.net/$card" | jq '.type, .brand, .bank' > card.txt
+	print_banner	
+	cat card.txt	
 	else
 	echo -e '\e[32mWrite normalno'
 	fi
 elif [ $choose == '2' ] || [ $choose == '02' ]
 then	
 	print_banner
-	echo -e '\e[96m 00:[back]\n 01:install Vuln nmap\n 02:install хак вайфай Wifite2\n 03:install rapid scan\n 04:install Infoga find email\n 05:install Phone infoga '	
+	echo -e '\e[96m 00:[back]\n 01:install Vuln nmap\n 02:install хак вайфай Wifite2\n 03:install rapid scan\n 04:install Infoga find email\n 05:install Phone infoga\n 06:install sherlock\n 07:install ngrok '	
 	read -p $'\e[95mchoose the number:' ins
 	if [ $ins == '0'  ] || [ $ins == '00' ]
 	then 
@@ -167,9 +179,29 @@ then
 	
 	elif [ $ins == '5'  ] || [ $ins == '05' ]
 	then 
-	echo "phone infoga"
-
-
+	git clone https://github.com/sundowndev/PhoneInfoga.git
+	cd PhoneInfoga
+	python3 -m pip install -r requirements.txt
+	chmod +x phoneinfoga,py	
+	python3 phoneinfoga,py
+	elif [ $ins == '6'  ] || [ $ins == '06' ]
+	then
+	git clone https://github.com/sherlock-project/sherlock.git
+	cd sherlock
+	python3 -m pip install -r requirements.txt
+	python3 sherlock.py --help
+	elif [ $ins == '7'  ] || [ $ins == '07' ]
+	then
+	print_banner
+	echo 'ты должен быть зареган на офф сайте ngrok.com и знать свой токен'
+	service apache2 start
+	cd /usr/bin/
+	wget https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip
+	unzip ngrok-stable-linux-amd64.zip
+	read -p $'\e[31mGive me Token: \e[0m' token	
+	ngrok authtoken $token
+	ngrok http 80	
+		
 	else
 	echo -e '\e[32mWrite normalno'
 	fi
