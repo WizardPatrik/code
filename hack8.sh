@@ -39,18 +39,16 @@ EOF
 
 
 
-
-
 echo -e "${CYAN} 01:Use\n 02:Install"
-echo -e "\e[35mchoose the number: "
-read choose
+
+read -p $'\e[35mchoose the number: \e[0m' choose
 if [ $choose == '1' ] || [ $choose == '01' ]
 then
 	print_banner	
 	echo -e "\e[96m 00:[back]\n 01:nmap\n 02:wpscan\n 03:nikto\n 04:dirb\n 05:sqlmap "
-	echo -e "\e[96m 06:change mac-adres\n 07:создать словарь для брута\n 08:update\n 09:uniscan"
-	echo -e "${GREEN}choose the number: "
-	read use
+	echo -e "\e[96m 06:change mac-adres\n 07:создать словарь для брута\n 08:update\n 09:uniscan\n 10:check Cms\n 11:find mail"
+	
+	 read -p $'\e[32mchoose the number:\e[0m' use
 	if [ $use == '0'  ] || [ $use == '00' ]
 	then 
 	bash hack8.sh
@@ -118,15 +116,21 @@ then
 	echo -e '\e[32mGive me target(example:  target.com): '
 	read site 
 	uniscan -u $site -qweds
+	elif [ $use == '10'  ]
+	then 
+	echo "scoro bydet"
+	elif [ $use == '11'  ] 
+	then 
+	read -p $'\e[31mGive me target: \e[0m' site
+	theharvester -d $site -b all -l 800
 	else
 	echo -e '\e[32mWrite normalno'
 	fi
 elif [ $choose == '2' ] || [ $choose == '02' ]
 then	
 	print_banner
-	echo -e '\e[96m 00:[back]\n 01:install Vuln nmap\n 02:install хак вайфай Wifite2\n 03:install rapid scan\n'	
-	echo -e "${GREEN}choose the number: "
-	read ins
+	echo -e '\e[96m 00:[back]\n 01:install Vuln nmap\n 02:install хак вайфай Wifite2\n 03:install rapid scan\n 04:install Infoga find email\n 05:install Phone infoga '	
+	read -p $'\e[95mchoose the number:' ins
 	if [ $ins == '0'  ] || [ $ins == '00' ]
 	then 
 	bash hack8.sh
@@ -151,6 +155,21 @@ then
 	echo -e ' \e[95mGive me target(example:  target.com):'
 	read $site
 	python rapidscan.py $site
+		
+	elif [ $ins == '4'  ] || [ $ins == '04' ]
+	then
+	echo -e "\e[91mInfoga \e[0m" 
+	git clone https://github.com/m4ll0k/Infoga.git
+	cd Infoga
+	python setup.py install
+	python infoga.py
+	echo -e "\e[33m success \e[0m"
+	
+	elif [ $ins == '5'  ] || [ $ins == '05' ]
+	then 
+	echo "phone infoga"
+
+
 	else
 	echo -e '\e[32mWrite normalno'
 	fi
