@@ -38,7 +38,31 @@ cat << 'EOF'
 EOF
 }
 
-
+nslookup_all() {
+	print_banner
+	echo -e '\e[96m 00:[back]\n 01:dns\n 02:mail\e[0m'
+	read -p $'\e[35m шо нужно? ' site
+	if [ $site == '1' ] || [ $site == '01' ]
+	then
+	print_banner
+	echo -e '\e[31m DNS\e[0m'
+	 read -p $'\e[32mGive me target(example:  target.com):' site
+	nslookup -query=ns $site
+	elif [ $site == '2' ] || [ $site == '02' ]
+	then 
+	echo 'nslookup2'	
+	 read -p $'\e[32mGive me target(example:  target.com):' site
+	print_banner
+	echo -e '\e[31m Mail\e[0m'
+		nslookup -query=mx $site
+	
+	elif [ $site == '0' ] || [ $site == '00' ]
+	then	
+		bash hack8.sh
+	else 
+	  echo 'gg'
+	fi
+}
 
 echo -e "${CYAN} 01:Use\n 02:Install"
 
@@ -46,10 +70,10 @@ read -p $'\e[35mchoose the number: \e[0m' choose
 if [ $choose == '1' ] || [ $choose == '01' ]
 then
 	print_banner	
-	echo -e "\e[96m 00:[back]\n 01:nmap\n 02:wpscan\n 03:nikto\n 04:dirb\n 05:sqlmap "
-	echo -e "\e[96m 06:change mac-adres\n 07:создать словарь для брута\n 08:update\n 09:uniscan\n 10:check Cms\n 11:find mail\n 12:ping\n 13:info Bankcard"
+	echo -e "\e[96m 00:[back]\n 01:nmap                 проверить открытые порты\n 02:wpscan               посмотрит уязвимости если сайт стоит на вп\n 03:nikto                сканирует сайт на наличие уязвимостей\n 04:dirb                 ищет дирректории на сайте\n 05:sqlmap               тут все понятно "
+	echo -e "\e[96m 06:change mac-adres     поменяет твой мак адресс на рандомный\n 07:crunch               создать словарь для брута\n 08:update               обновись\n 09:uniscan              сканер на наличие уязвимостей\n 10:check Cms            посмотришь о сайте там информацию\n 11:find mail            найдет емайлы на сайте\n 12:ping                 узнает ip сайта\n 13:info Bankcard        найдет самую базовую информацию о банк карте\n 14:nslookup             найдет  днс ip адреса и почтовые"
 	
-	 read -p $'\e[32mchoose the number:\e[0m' use
+	 read -p $'\e[35mchoose the number: \e[0m' use
 	if [ $use == '0'  ] || [ $use == '00' ]
 	then 
 	bash hack8.sh
@@ -57,14 +81,14 @@ then
 	then 
 	  print_banner
 	 echo 'Nmap'
-	 echo -e '\e[32mGive me target(example:  target.com):'
+	 echo -e '\e[32mGive me target(example:  target.com): '
 	  read site
 	  nmap -A $site
 	elif [ $use == '2'  ] || [ $use == '02'  ]
 	then
 	 print_banner
 	 echo 'Wpscan'
-	 echo -e '\e[32mGive me target(example:  target.com):'
+	 echo -e '\e[32mGive me target(example:  target.com): '
 	  read site
 	  wpscan --update
 	  wpscan -u $site -e 
@@ -119,7 +143,8 @@ then
 	uniscan -u $site -qweds
 	elif [ $use == '10'  ]
 	then 
-	echo "scoro bydet"
+	read -p $'\e[32mGive me target(example:  target.com): ' site
+	firefox http://whois.domaintools.com/$site
 	elif [ $use == '11'  ] 
 	then 
 	read -p $'\e[31mGive me target: \e[0m' site
@@ -135,13 +160,16 @@ then
 	curl "https://lookup.binlist.net/$card" | jq '.type, .brand, .bank' > card.txt
 	print_banner	
 	cat card.txt	
+	elif [ $use == '14'  ]
+	then
+	nslookup_all 
 	else
-	echo -e '\e[32mWrite normalno'
+	   echo -e '\e[32mНе то написал попробуй еще'
 	fi
 elif [ $choose == '2' ] || [ $choose == '02' ]
 then	
 	print_banner
-	echo -e '\e[96m 00:[back]\n 01:install Vuln nmap\n 02:install хак вайфай Wifite2\n 03:install rapid scan\n 04:install Infoga find email\n 05:install Phone infoga\n 06:install sherlock\n 07:install ngrok '	
+	echo -e '\e[96m 00:[back]\n 01:install Vuln nmap               будешь сканировать nmap и сразу увидишь уязвимости \n 02:install Wifite2                 установишь и проверяй на безопасность соседей\n 03:install rapid scan              достаточно мощьный пентест сайтов  советую)\n 04:install Infoga find email       иноврмация по емайл\n 05:install Phone infoga            пробив телефона\n 06:install sherlock                пробив по логинам\n 07:install ngrok                 стартанет ngrok'	
 	read -p $'\e[95mchoose the number:' ins
 	if [ $ins == '0'  ] || [ $ins == '00' ]
 	then 
@@ -164,7 +192,7 @@ then
 	then 
 	print_banner
 	wget -O rapidscan.py https://raw.githubusercontent.com/skavngr/rapidscan/master/rapidscan.py && chmod +x rapidscan.py
-	echo -e ' \e[95mGive me target(example:  target.com):'
+	echo -e '\e[95mGive me target(example:  target.com): '
 	read $site
 	python rapidscan.py $site
 		
@@ -193,17 +221,16 @@ then
 	elif [ $ins == '7'  ] || [ $ins == '07' ]
 	then
 	print_banner
-	echo 'ты должен быть зареган на офф сайте ngrok.com и знать свой токен'
+	echo 'неволнуйся токен я уже тебе выдам'
 	service apache2 start
 	cd /usr/bin/
 	wget https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip
-	unzip ngrok-stable-linux-amd64.zip
-	read -p $'\e[31mGive me Token: \e[0m' token	
-	ngrok authtoken $token
+	unzip ngrok-stable-linux-amd64.zip	
+	ngrok authtoken 1Q8zWq3BMaNJLQmDY1yKDCTWtro_EMzcfc62c8MwCiQywcP3
 	ngrok http 80	
-		
+	firefox http://127.0.0.1:4040/inspect/http	
 	else
-	echo -e '\e[32mWrite normalno'
+	 echo -e '\e[32mWrite normalno'
 	fi
 else
   echo -e '\e[32mWrite normalno'
